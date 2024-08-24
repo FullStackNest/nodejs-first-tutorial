@@ -10,14 +10,47 @@
 <body>
     <h1>JS Cluient</h1>
 
+    <input type="text" name="" id="username">
+    <button id="submit">Submit</button>
+
     <script>
 
-        fetch("http://localhost:8000/data")
-            .then(res => res.json())
-            .then(info => {
-                console.log(info);
+        document.getElementById("submit").addEventListener("click", function () {
+            let username = document.getElementById("username").value;
+            let errMsg = "";
+
+            fetch("http://localhost:8000/new", {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    // user: username // for error
+                    username
+                })
+            }).then(res => {
+                if (res.status === 500) {
+                    errMsg = res.statusText;
+
+                    throw Error();
+                } else {
+                    return res.json();
+                }
 
             })
+                .then((msg) => {
+                    console.log(msg);
+                    alert("Submitted")
+                })
+                .catch(err => console.log(errMsg))
+        })
+
+        // fetch("http://localhost:8000/data")
+        //     .then(res => res.json())
+        //     .then(info => {
+        //         console.log(info);
+
+        //     })
 
     </script>
 </body>

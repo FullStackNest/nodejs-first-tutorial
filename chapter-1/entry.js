@@ -1,8 +1,9 @@
 // Plain-nodejs without any framework (Express.js**, Nest.js)
 const http = require("http");
 const url = require("url");
-const qs = require("querystring");
-const { DATA } = require("./data");
+
+
+const { homeController, dataController } = require("./controller");
 // esm (import,export), ejs, cjs(require, module.exports)
 
 // ESM: EcmaScript Module
@@ -27,18 +28,10 @@ http.createServer(function (req, res) {
 
 
     if (path === "/") {
-        console.log("Nodejs !");
-        const qry = qs.parse(parsedURL.query)
-        console.log(qry);
-        res.write(`<h1>Nodejs Server Home page</h1>`)
-        res.end();
+        homeController(req, res, parsedURL)
     }
     else if (path === "/data" && method === "GET") {
-
-        res.end(JSON.stringify({
-            status: 200,
-            data: DATA
-        }))
+        dataController(req, res)
     }
 }).listen(8000, function () {
     console.log("Server Started");
